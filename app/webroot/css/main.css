@@ -1,0 +1,61 @@
+﻿
+#container {
+  width: 800px;
+  margin: 0 auto;
+  background-color: #EEEEFF;
+}
+
+#header:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+#header_menu{
+  float: right;
+}
+
+#footer {
+	height: 20px;
+	background-color: #EEEEFF;
+}
+
+#content {
+	font-size: 1.2em;
+  background-color: #FFFFFF;
+}
+
+.tweet {
+	
+	width: 400px;
+}
+
+/*ユーザー名、フォロー数、フォロワー数、つぶやき数*/
+.user {
+	float: right;
+	background-color: #EEEEFF;
+}
+
+/*ユーザー名と最新のつぶやき*/
+.userSimple {
+	width: 400px;
+}
+
+.paging {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.follow {
+	float: right;
+	font-size: 0.8em;
+}
+
+.delete_tweet {
+	float: right;
+	font-size: 0.8em;
+}
+
+small {
+	color: #888888;
+}
