@@ -4,11 +4,14 @@ App::uses('AppController', 'Controller');
 class TweetsController extends AppController {
 	public $components = array('Session');
 	
+	
   public function beforeFilter() {
     parent::beforeFilter();
 		
 		//ログイン済みでなければアクセスできないアクションを指定
     $this->Auth->deny('index');
+    
+    
   }
 	
 	//ホーム画面
@@ -62,21 +65,34 @@ class TweetsController extends AppController {
   }
 
 
-	//つぶやく
+	//ajaxでつぶやく
 	public function add_tweet(){
-		
-		if ($this->request->is('post')) {
-			//ユーザIDを持ってくる
-			$u = $this->Auth->user();
-			$this->request->data["Tweet"]["user_id"] = $u["id"];
+		$this->layout = "";
+		if ($this->request->is('post') && $this->request->is('ajax')) {
+			//saveの返り値がなぜかtime情報を持ってないのでここで追加するが、
+			//Timezoneを設定しないとずれるので設定しておく
+			date_default_timezone_set('Asia/Tokyo');
+			
+			$saveData = array(
+				'Tweet' => array(
+					'user_id' => $this->Auth->user()['id'],
+					'content' => $this->request->data['tweet'],
+					'time' => date('Y-m-d H:i:s')
+				)
+			);
+			$saveData['User'] = $this->Auth->user();
 			//DBに保存
-			if ($this->Tweet->save($this->request->data)) {
-				return $this->redirect('/tweets/index');
+			$savedData = $this->Tweet->save($saveData);
+			
+			if ($savedData) {
+				$this->set('tweet', $savedData);
+				
 			} else {
 				$this->Session->setFlash('投稿は140文字以内です');
+				
 			}
+			
 		}
-		$this->redirect('/tweets/index');
 	}
 	
 	//tweetを削除
@@ -111,10 +127,47 @@ class TweetsController extends AppController {
 				}
 			}
 			
-			$options = array( "conditions" => array( 'user_id' => $ids ),
+			$options = array( "conditions" => array( 'user_id' => $ids  ),
     			'order' => array('Tweet.id' => 'desc'),
    	 			'limit' => 10,
     			'page' => $this->request->query["page_num"] );
+			$tweets = $this->Tweet->find( 'all', $options);
+			$this->set('tweets', $tweets);
+			
+			//debug($this->request->query);
+		}
+		
+	}
+	
+	//定期的にツイート更新
+	public function load_new_tweets() {
+		if ($this->request->is('get') && $this->request->is('ajax')) {
+			$this->layout = "";
+			
+			//このアクションが呼ばれた場所がindexかpostsかによって条件分岐
+			//クエリ["current_location"]は"index"または"posts/ユーザ名"であるはず
+			if( $this->request->query["current_location"] == "index" ) {
+				//フォローしてる人のidを取得
+				$this->loadModel('Follow');
+				$ids = $this->Follow->getFollowingIds( $this->Auth->user()['id'], true);
+			} else {
+				$splitted_location = explode( "/", $this->request->query["current_location"] );
+				if( $splitted_location[0] == "posts" ) {
+					//posts画面のユーザのidを取得
+					$this->loadModel('User');
+					$ids = $this->User->usernameToId( $splitted_location );
+				} else {
+					//不正なGETパラメータ
+					return false;
+				}
+			}
+			$t = str_replace( "%20", " ", $this->request->query["current_tweet_date"]);
+			$t = str_replace( "%3A", ":", $t);
+			
+			$options = array( 
+				"conditions" => array( 'user_id' => $ids, 'time >' => $t),
+    		'order' => array('Tweet.id' => 'desc') );
+    	
 			$tweets = $this->Tweet->find( 'all', $options);
 			$this->set('tweets', $tweets);
 			

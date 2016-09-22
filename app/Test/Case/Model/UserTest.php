@@ -18,5 +18,6 @@ class UserTest extends CakeTestCase {
     $this->assertEquals(array_key_exists('password', $results), true);
     $this->assertEquals(array_key_exists('mail', $results), true);
   }
+  
 }
 ?>

@@ -1,6 +1,10 @@
-﻿<?php echo $this->Html->script( 'jquery-3.1.0.min.js', array( 'inline' => false)); ?>
-<?php echo $this->Html->script( 'hoverColor.js', array( 'inline' => false)); ?>
-<?php echo $this->Html->script( 'loadTweetsWhenScrolled.js', array( 'inline' => false)); ?>
+﻿<?php
+	echo $this->Html->script( 'jquery-3.1.0.min.js', array( 'inline' => false));
+	echo $this->Html->script( 'loadTweetsWhenScrolled.js', array( 'inline' => false));
+	echo $this->Html->script( 'addTweet.js', array( 'inline' => false));
+	echo $this->Html->script( 'loadTweetsPeriodically.js', array( 'inline' => false));
+	echo $this->Html->script( 'hoverColor.js', array( 'inline' => false));
+ ?>
 
 
 <?php
@@ -12,12 +16,12 @@
 <small>いまどうしてる？</small>
 <strong><?php echo $this->Session->flash(); ?></strong>
 <?php print(
-  $this->Form->create('Tweet', array('url'=>'add_tweet')) .
+  $this->Form->create('Tweet', array('default'=>false)) .
   $this->Form->input('content', array( 'label' => false ) ) .
   $this->Form->end('つぶやく')
 ); ?>
 
-<small>
+<small id=latest_tweet>
 <?php
 if( !empty($latest_tweet) ) {
 	echo "最新のつぶやき: ". $latest_tweet["Tweet"]["content"] . " ";

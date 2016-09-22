@@ -11,13 +11,21 @@
 		?>
 	</div>
 	<p>
+	<span class=tweet_username>
 	<?php 
-	//ツイート表示
+	//名前表示
 	$uName = h($tweet["User"]["username"]);
-	echo $this->Html->link($uName, "/tweets/posts/" . $uName );
-	echo " " . h($tweet["Tweet"]["content"]);
+	echo $this->Html->link($uName, "/tweets/posts/" . $uName ) . " ";
 	?>
+	</span>
+	
+	<span class=tweet_content>
+	<?php
+	//ツイート表示
+	echo h($tweet["Tweet"]["content"]);
+	?>
+	</span>
 	</p>
 	
-	<small><?php print( h($tweet["Tweet"]["time"])); ?></small>
+	<small class=tweet_date><?php print( h($tweet["Tweet"]["time"])); ?></small>
 </div>

@@ -7,7 +7,7 @@
 ?>
 
 <h1><?php print(h($name)); ?>さんの投稿一覧</h1>
-<small>
+<small id=latest_tweet>
 <?php
 if( !empty($latest_tweet) ) {
 	echo "最新のつぶやき: ". $latest_tweet["Tweet"]["content"] . " ";
