@@ -9,7 +9,7 @@
 	echo $this->element('putUserStatus' )
 ?>
 
-<h1><?php print(h($name)); ?>さんの投稿一覧</h1>
+<h1><?php print(h($username)); ?>さんの投稿一覧</h1>
 <small id=latest_tweet>
 <?php
 if( !empty($latest_tweet) ) {
@@ -22,7 +22,7 @@ if( !empty($latest_tweet) ) {
 ?>
 </small>
 
-<?php echo '<div id="tweetlist" data-page_num=1 data-current_location="posts/'. $name. '">' ?>
+<?php echo '<div id="tweetlist" data-page_num=1 data-current_location="posts/'. $username. '">' ?>
 	<?php
 		foreach($tweets as $tweet):
 			echo $this->element('putTweet', array('tweet' => $tweet));

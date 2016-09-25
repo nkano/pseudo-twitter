@@ -50,9 +50,13 @@ class TweetsController extends AppController {
 		
 		//select * from tweets where user_id = $user_id
     $conditions = array( 'user_id' => $user_id );
-    $tweets = $this->paginate($conditions);
+    $options = array( "conditions" => array( 'user_id' => $user_id ),
+    		'order' => array('Tweet.id' => 'desc'),
+    		'limit' => 10,
+    		'page' => 1 );
+		$tweets = $this->Tweet->find( 'all', $options);
 		$this->set('tweets', $tweets);
-   	$this->set('name', $username);
+    
 		
 		//ユーザー情報をset
 		$this->setUserStatus( $user_id );
@@ -87,8 +91,8 @@ class TweetsController extends AppController {
 				$this->set('tweet', $savedData);
 				
 			} else {
-				$this->Session->setFlash('投稿は140文字以内です');
-				
+				//投稿失敗
+				$this->set('tweet', array());
 			}
 			
 		}
@@ -99,7 +103,7 @@ class TweetsController extends AppController {
 		if($this->request->is('post')){
 			$this->Tweet->delete($tweet_id);
 		}
-		$this->redirect('/tweets/index');
+		return $this->redirect('/tweets/index');
 	}
 	
 	
