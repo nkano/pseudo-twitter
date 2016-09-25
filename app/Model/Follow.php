@@ -43,4 +43,14 @@ class Follow extends AppModel {
 		return $follow_ids;
 	}
 	
+	public function countFollowing( $user_id ) {
+		$conditions = array( 'user_id' => $user_id );
+		return $this->find( 'count', array( 'conditions' => $conditions ) );
+	}
+	
+	public function countFollower( $follow_id ) {
+		$conditions = array( 'follow_id' => $follow_id );
+		return $this->find( 'count', array( 'conditions' => $conditions ) );
+	}
+	
 }

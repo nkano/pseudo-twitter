@@ -67,5 +67,12 @@ class User extends AppModel {
   	return $this->find('first', array("conditions"=>array("username"=>$username)))["User"]["id"];
   }
   
+  public function userIdToName( $user_id ) {
+  	
+  	//select id from users where username = $username
+  	return $this->find('first', array("conditions"=>array("id"=>$user_id)))["User"]["username"];
+  	
+  }
+  
 
 }

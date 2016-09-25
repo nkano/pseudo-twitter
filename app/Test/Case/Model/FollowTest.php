@@ -50,5 +50,11 @@ class FollowTest extends CakeTestCase {
   	
   }
   
+  public function testCounts() {
+  	$this->assertEquals( 2, $this->Follow->countFollowing(1) );
+  	$this->assertEquals( 1, $this->Follow->countFollower(1) );
+  	
+  }
+  
 }
 ?>

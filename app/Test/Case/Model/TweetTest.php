@@ -48,9 +48,11 @@ class TweetTest extends CakeTestCase {
   public function testGetLatest() {
   	$latest = $this->Tweet->getLatest( 1 );
   	$this->assertEquals( 'new tweet', $latest['Tweet']['content'] );
-  	
   }
   
+  public function testCountTweetNum() {
+  	$this->assertEquals( 2, $this->Tweet->countTweetNum(1) );
+  }
   
 }
 ?>

@@ -49,22 +49,13 @@ class AppController extends Controller {
 		$this->loadModel('Tweet');
 		
 		//名前
-		$conditions = array( 'id' => $user_id );
-		$username = $this->User->find('first', array( 'conditions' => $conditions ) )['User']['username'];
-		$this->set('username', $username);
-		
-		//select * from follows where user_id == 自分のID
-		$conditions = array( 'user_id' => $user_id );
-		$following_num = $this->Follow->find( 'count', array( 'conditions' => $conditions ) );
-		$this->set('following_num', $following_num );
-		//select * from follows where follow_id == 自分のID
-		$conditions = array( 'follow_id' => $user_id );
-		$followers_num = $this->Follow->find( 'count', array( 'conditions' => $conditions ) );
-		$this->set('followers_num', $followers_num );
+		$this->set('username', $this->User->userIdToName($user_id));
+		//フォロー数
+		$this->set('following_num', $this->Follow->countFollowing($user_id) );
+		//フォロワー数
+		$this->set('followers_num', $this->Follow->countFollower($user_id) );
 		//つぶやき数をViewに送る
-		$conditions = array( 'user_id' => $user_id );
-		$tweets_num = $this->Tweet->find( 'count', array( 'conditions' => $conditions ) );
-		$this->set('tweets_num', $tweets_num );
+		$this->set('tweets_num', $this->Tweet->countTweetNum( $user_id ) );
 	}
 	
 }

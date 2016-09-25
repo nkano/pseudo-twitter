@@ -3,7 +3,7 @@
 App::uses('AuthComponent', 'Controller/Component');
 
 class UserTest extends CakeTestCase {
-	public $fixtures = array('app.user', 'app.tweet');
+	public $fixtures = array('app.user', 'app.tweet', 'app.follow');
 	
 	public function setUp() {
 		$this->User = ClassRegistry::init('User');
@@ -63,6 +63,8 @@ class UserTest extends CakeTestCase {
   public function testUsernameToId() {
   	$this->assertEquals( 1, $this->User->usernameToId( 'aaa' ) );
   }
-  
+  public function testUserIdToName() {
+  	$this->assertEquals( 'aaa', $this->User->userIdToName( 1 ) );
+  }
 }
 ?>

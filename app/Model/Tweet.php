@@ -41,4 +41,9 @@ class Tweet extends AppModel {
 		);
   }
   
+  public function countTweetNum( $user_id ) {
+  	$conditions = array( 'user_id' => $user_id );
+		return $this->find( 'count', array( 'conditions' => $conditions ) );
+  }
+  
 }
