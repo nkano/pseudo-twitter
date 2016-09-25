@@ -13,10 +13,22 @@ class Tweet extends AppModel {
 	
 	
   public $validate = array(
+  	'user_id' => array (
+  		array(
+  			'rule' => 'numeric',
+  			'message' => 'user_idが数値ではありません'
+  			)
+  	),
 		'content' => array (
       array(
         'rule' => array('between', 1, 140),
         'message' => '140文字を越えています'
+			)
+		),
+		'time' => array (
+			array(
+				'rule' => array('datetime', 'ymd'),
+				'message' => '日時が不正です。'
 			)
 		)
   );

@@ -1,6 +1,9 @@
-﻿<?php echo $this->Html->script( 'jquery-3.1.0.min.js', array( 'inline' => false)); ?>
-<?php echo $this->Html->script( 'hoverColor.js', array( 'inline' => false)); ?>
-<?php echo $this->Html->script( 'loadTweetsWhenScrolled.js', array( 'inline' => false)); ?>
+﻿<?php
+	echo $this->Html->script( 'jquery-3.1.0.min.js', array( 'inline' => false));
+	echo $this->Html->script( 'hoverColor.js', array( 'inline' => false));
+	echo $this->Html->script( 'loadTweetsWhenScrolled.js', array( 'inline' => false));
+	echo $this->Html->script( 'loadTweetsPeriodically.js', array( 'inline' => false));
+?>
 
 <?php
 	echo $this->element('putUserStatus' )

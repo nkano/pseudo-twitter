@@ -41,7 +41,6 @@ class TweetsController extends AppController {
 		$this->set( 'latest_tweet', $latest_tweet );
 		
 		
-
 	}
 	
 	//ユーザごとのツイート画面

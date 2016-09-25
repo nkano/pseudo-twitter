@@ -7,16 +7,30 @@ class Follow extends AppModel {
 		'Followee' => array(
 			'className' => 'User',
 			'foreignKey' => 'user_id',
-			//'counterCache' => true	//ここには使えないっぽい？
 			
 		),
 			'Follower' => array(
 			'className' => 'User',
 			'foreignKey' => 'follow_id',
-			//'counterCache' => true
 		)
 	);
 	
+	public $validate = array(
+  	'user_id' => array (
+  		array(
+  			'rule' => array('isUnique', array('user_id', 'follow_id'), false),
+  			'message' => 'user_idとfollow_idの組み合わせは一意でなければなりません'
+  		),
+  		array(
+  			'rule' => 'inableSelfFollow',
+  			'message' => '自分自身をフォローできません'
+  		)
+  	)
+  );
+	
+	public function inableSelfFollow( $check ) {
+		return ( $this->data['Follow']['user_id'] != $this->data['Follow']['follow_id'] );
+	}
 	
 	//$user_idがフォローしてる人のidを返す
 	public function getFollowingIds( $user_id, $add_himself = false ) {
