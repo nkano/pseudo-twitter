@@ -25,8 +25,8 @@ class TweetsController extends AppController {
 		//フォローしてる人(+自分)のツイートをViewに送る
 		//select * from tweets where user_id IN follow_ids;
 		$options = array( "conditions" => array( 'user_id' => $follow_ids ),
-    		'order' => array('Tweet.id' => 'desc'),
-    		'limit' => 10,
+    		'order' => array('Tweet.time' => 'desc'),
+    		'limit' => 20,
     		'page' => 1 );
 		$tweets = $this->Tweet->find( 'all', $options);
 		$this->set('tweets', $tweets);
@@ -51,8 +51,8 @@ class TweetsController extends AppController {
 		//select * from tweets where user_id = $user_id
     $conditions = array( 'user_id' => $user_id );
     $options = array( "conditions" => array( 'user_id' => $user_id ),
-    		'order' => array('Tweet.id' => 'desc'),
-    		'limit' => 10,
+    		'order' => array('Tweet.time' => 'desc'),
+    		'limit' => 20,
     		'page' => 1 );
 		$tweets = $this->Tweet->find( 'all', $options);
 		$this->set('tweets', $tweets);
@@ -131,8 +131,8 @@ class TweetsController extends AppController {
 			}
 			
 			$options = array( "conditions" => array( 'user_id' => $ids  ),
-    			'order' => array('Tweet.id' => 'desc'),
-   	 			'limit' => 10,
+    			'order' => array('Tweet.time' => 'desc'),
+   	 			'limit' => 20,
     			'page' => $this->request->query["page_num"] );
 			$tweets = $this->Tweet->find( 'all', $options);
 			$this->set('tweets', $tweets);
@@ -169,7 +169,7 @@ class TweetsController extends AppController {
 			
 			$options = array( 
 				"conditions" => array( 'user_id' => $ids, 'time >' => $t),
-    		'order' => array('Tweet.id' => 'desc') );
+    		'order' => array('Tweet.time' => 'desc') );
     	
 			$tweets = $this->Tweet->find( 'all', $options);
 			$this->set('tweets', $tweets);

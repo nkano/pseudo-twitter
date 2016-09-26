@@ -100,8 +100,8 @@ class TweetControllerTest extends ControllerTestCase {
 			'data' => $data, 'method' => 'get', 'return' => 'vars'
 		));
 		$this->assertCount(1, $this->vars['tweets']);
-		//新しいツイートが0件
 		
+		//新しいツイートが0件
 		$data = array(
 			'current_location' => 'index',
 			'current_tweet_date' => '2016-09-23 03:08:00'

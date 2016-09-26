@@ -64,10 +64,10 @@ class UsersController extends AppController {
 			$conditions = array('username LIKE' => '%'.$query.'%' );
 			$result = $this->paginate($conditions);
 	    $this->set('result', $result);
-	    
-	    if( count( $result ) >= 1 ) {
+	    //debug($this->request->params);
+	    if( $this->request->params['paging']['User']['count'] >= 1 ) {
 			
-				$this->Session->setFlash( h($query).'の検索結果は'.count($result).'件です');
+				$this->Session->setFlash( h($query).'の検索結果は'.$this->request->params['paging']['User']['count'].'件です');
 			
 				//検索に引っかかった人たちの最新のつぶやき
 				$this->loadModel('Tweet');
