@@ -46,4 +46,12 @@ class Tweet extends AppModel {
 		return $this->find( 'count', array( 'conditions' => $conditions ) );
   }
   
+  public function pageTweets( $ids, $page, $limit = 20 ) {
+  	$options = array( "conditions" => array( 'user_id' => $ids ),
+    	'order' => array('Tweet.time' => 'desc'),
+    	'limit' => $limit,
+    	'page' => $page );
+		return $this->find( 'all', $options);
+  }
+  
 }

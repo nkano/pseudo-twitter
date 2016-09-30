@@ -54,5 +54,15 @@ class TweetTest extends CakeTestCase {
   	$this->assertEquals( 2, $this->Tweet->countTweetNum(1) );
   }
   
+  public function testPageTweets() {
+  	$tweets = $this->Tweet->pageTweets( array(1,2), 1 );
+  	$this->assertCount(3, $tweets);
+  	$tweets = $this->Tweet->pageTweets( array(1), 1 );
+  	$this->assertCount(2, $tweets);
+  	$tweets = $this->Tweet->pageTweets( array(1,2), 2 );
+  	$this->assertCount(0, $tweets);
+  	
+  }
+  
 }
 ?>

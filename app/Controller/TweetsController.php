@@ -16,19 +16,12 @@ class TweetsController extends AppController {
 	
 	//ホーム画面
 	public function index() {
-		
-		
 		//フォローしてる人のidを取得
 		$this->loadModel('Follow');
 		$follow_ids = $this->Follow->getFollowingIds( $this->Auth->user()['id'], true);
 		
-		//フォローしてる人(+自分)のツイートをViewに送る
-		//select * from tweets where user_id IN follow_ids;
-		$options = array( "conditions" => array( 'user_id' => $follow_ids ),
-    		'order' => array('Tweet.time' => 'desc'),
-    		'limit' => 20,
-    		'page' => 1 );
-		$tweets = $this->Tweet->find( 'all', $options);
+		//フォローしてる人(+自分)のツイート
+		$tweets = $this->Tweet->pageTweets( $follow_ids, 1 );
 		$this->set('tweets', $tweets);
 		
 		//debug($tweets);
@@ -48,15 +41,9 @@ class TweetsController extends AppController {
 		$this->loadModel('User');
 		$user_id = $this->User->usernameToId( $username );
 		
-		//select * from tweets where user_id = $user_id
-    $conditions = array( 'user_id' => $user_id );
-    $options = array( "conditions" => array( 'user_id' => $user_id ),
-    		'order' => array('Tweet.time' => 'desc'),
-    		'limit' => 20,
-    		'page' => 1 );
-		$tweets = $this->Tweet->find( 'all', $options);
+		//ツイート
+		$tweets = $this->Tweet->pageTweets( $user_id, 1 );
 		$this->set('tweets', $tweets);
-    
 		
 		//ユーザー情報をset
 		$this->setUserStatus( $user_id );
@@ -113,7 +100,6 @@ class TweetsController extends AppController {
 			$this->layout = "";
 			
 			//このアクションが呼ばれた場所がindexかpostsかによって条件分岐
-			//クエリ["current_location"]は"index"または"posts/ユーザ名"であるはず
 			if( $this->request->query["current_location"] == "index" ) {
 				//フォローしてる人のidを取得
 				$this->loadModel('Follow');
@@ -130,11 +116,8 @@ class TweetsController extends AppController {
 				}
 			}
 			
-			$options = array( "conditions" => array( 'user_id' => $ids  ),
-    			'order' => array('Tweet.time' => 'desc'),
-   	 			'limit' => 20,
-    			'page' => $this->request->query["page_num"] );
-			$tweets = $this->Tweet->find( 'all', $options);
+			$page = $this->request->query["page_num"];
+			$tweets = $this->Tweet->pageTweets( $ids, $page );
 			$this->set('tweets', $tweets);
 			
 			//debug($this->request->query);
@@ -148,7 +131,6 @@ class TweetsController extends AppController {
 			$this->layout = "";
 			
 			//このアクションが呼ばれた場所がindexかpostsかによって条件分岐
-			//クエリ["current_location"]は"index"または"posts/ユーザ名"であるはず
 			if( $this->request->query["current_location"] == "index" ) {
 				//フォローしてる人のidを取得
 				$this->loadModel('Follow');
