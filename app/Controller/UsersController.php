@@ -5,13 +5,6 @@ App::uses('AppController', 'Controller');
 class UsersController extends AppController {
 	public $components = array('Session', 'Auth');
 	
-	  public $paginate = array(
-    'User' => array(
-    	'limit' =>10,
-    	'order' => array('created' => 'desc')
-     )
-	);
-	
   public function beforeFilter() {
     parent::beforeFilter();
 
@@ -62,12 +55,12 @@ class UsersController extends AppController {
 	    $this->set('query', $query);
 			
 			$conditions = array('username LIKE' => '%'.$query.'%' );
-			$result = $this->paginate($conditions);
+			$result = $this->User->find('all', array('conditions'=> $conditions));
 	    $this->set('result', $result);
 	    //debug($this->request->params);
-	    if( $this->request->params['paging']['User']['count'] >= 1 ) {
+	    if( count($result) >= 1 ) {
 			
-				$this->Session->setFlash( h($query).'の検索結果は'.$this->request->params['paging']['User']['count'].'件です');
+				$this->Session->setFlash( h($query).'の検索結果は'.count($result).'件です');
 			
 				//検索に引っかかった人たちの最新のつぶやき
 				$this->loadModel('Tweet');
@@ -85,9 +78,7 @@ class UsersController extends AppController {
 		
 		if( !empty($this->Auth->user()) ) {
 			$this->loadModel("Follow");
-			$conditions = array( 'user_id' => $this->Auth->user());
-			$follows = $this->Follow->find('all', array( 'conditions' => $conditions));
-			$this->set( 'follows', $follows );
+			$this->set( 'following_ids', $this->Follow->getFollowingIds( $this->Auth->user()['id'] ) );
 		}
 		
 	}

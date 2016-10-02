@@ -50,6 +50,16 @@ class FollowTest extends CakeTestCase {
   	
   }
   
+  public function testGetFollowerIds() {
+  	$ids = $this->Follow->getFollowerIds( 1 );
+  	$this->assertEquals( array(2), $ids);
+  	
+  	$ids = $this->Follow->getFollowerIds( 1000 );
+  	$this->assertEquals( array(), $ids);
+  	
+  }
+
+  
   public function testCounts() {
   	$this->assertEquals( 2, $this->Follow->countFollowing(1) );
   	$this->assertEquals( 1, $this->Follow->countFollower(1) );

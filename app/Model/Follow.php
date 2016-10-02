@@ -2,7 +2,8 @@
 App::uses('AppModel', 'Model');
 
 class Follow extends AppModel {
-	//アソシエーション。重くなったらbindModel()
+	/*
+	//アソシエーション
 	public $belongsTo = array(
 		'Followee' => array(
 			'className' => 'User',
@@ -14,6 +15,7 @@ class Follow extends AppModel {
 			'foreignKey' => 'follow_id',
 		)
 	);
+	*/
 	
 	public $validate = array(
   	'user_id' => array (
@@ -38,9 +40,20 @@ class Follow extends AppModel {
 		$follows = $this->find( 'all', compact( "conditions" ) );
 		$follow_ids = ($add_himself)? array( $user_id ) : array();
 		foreach( $follows as $f ) {
-			$follow_ids[] = $f["Follower"]["id"];	//フォローしてる人のIDを入れる
+			$follow_ids[] = $f["Follow"]["follow_id"];	//フォローしてる人のIDを入れる
 		}
 		return $follow_ids;
+	}
+	
+	//$user_idをフォローしてる人のidを返す
+	public function getFollowerIds( $user_id ) {
+		$conditions = array( 'follow_id' => $user_id );
+		$followers = $this->find( 'all', compact( "conditions" ) );
+		$follower_ids = array();
+		foreach( $followers as $f ) {
+			$follower_ids[] = $f["Follow"]["user_id"];	//フォローしてる人のIDを入れる
+		}
+		return $follower_ids;
 	}
 	
 	public function countFollowing( $user_id ) {

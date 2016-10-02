@@ -23,56 +23,6 @@
 </h2>
 
 
-<?php foreach( $result as $r ) { ?>
-	<div class=userSimple>
-		<div class=follow>
-			<?php
-				//フォローボタン
-				if( !empty( $authUser ) and $authUser["id"] != $r["User"]["id"] ) {
-					
-					//フォロー済みかチェック
-					$isFollow = false;
-					foreach( $follows as $f ) {
-						if( $f["Follow"]["follow_id"] == $r["User"]["id"] ) {
-							$isFollow = true;
-							break;
-						}
-					}
-					if( $isFollow ) {
-						echo "フォロー済み";
-					} else {
-						//未フォローならボタンを表示する
-						echo $this->Form->postButton("follow", "/Users/add_follow/",
-								array('data'=> array('follow_id'=>$r["User"]["id"])));
-					}
-				}
-			?>
-		</div>
-		<p>
-			<?php
-			//名前
-			echo $this->Html->link(h($r["User"]["username"]), "/tweets/posts/"
-				. h($r["User"]["username"]));
-			?>
-		</p>
-		<small>
-			<?php
-				//直近のツイートを表示
-				if( !empty($latest_tweets[$r["User"]["id"]]) ) {
-					echo $latest_tweets[$r["User"]["id"]]["Tweet"]["content"];
-					echo ' '. $latest_tweets[$r["User"]["id"]]["Tweet"]["time"];
-				} else {
-					echo "";	//ツイート数0のとき
-				}
-			?>
-		</small>
-	</div>
-<?php } ?>
-
-<div class=paging>
-	<?php
-	echo $this->Paginator->prev('< 前へ', array(), null, array('class' => 'prev disabled'));
-	//echo $this->Paginator->numbers(array('separator' => ''));
-	echo $this->Paginator->next('次へ >', array(), null, array('class' => 'next disabled'));
-?>
-</div>
+<?php foreach( $result as $user ) {
+	echo $this->element('putUserSimple', array('user' => $user));
+} ?>
