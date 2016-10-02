@@ -28,9 +28,9 @@ foreach($followers as $follower):
 		<div class=follow>
 		<?php
 			//フォローボタン
-			if( $user_id == $user["id"]
-			and !empty( $user )
-			and $user["id"] != $current_id ) {
+			if( $user_id == $authUser["id"]
+			and !empty( $authUser )
+			and $authUser["id"] != $current_id ) {
 				//フォロー済みかチェック
 				$isFollow = false;
 				foreach( $follows as $f ) {

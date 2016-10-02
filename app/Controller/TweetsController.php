@@ -33,7 +33,6 @@ class TweetsController extends AppController {
 		$latest_tweet = $this->Tweet->getLatest( $this->Auth->user()['id'] );
 		$this->set( 'latest_tweet', $latest_tweet );
 		
-		
 	}
 	
 	//ユーザごとのツイート画面

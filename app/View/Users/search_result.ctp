@@ -28,7 +28,7 @@
 		<div class=follow>
 			<?php
 				//フォローボタン
-				if( !empty( $user ) and $user["id"] != $r["User"]["id"] ) {
+				if( !empty( $authUser ) and $authUser["id"] != $r["User"]["id"] ) {
 					
 					//フォロー済みかチェック
 					$isFollow = false;

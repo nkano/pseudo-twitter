@@ -36,13 +36,12 @@ class AppController extends Controller {
 
 	public function beforeFilter() {
 		$this->Auth->allow();
-		$this->set('user', $this->Auth->user());
+		$this->set('authUser', $this->Auth->user());
 		$this->layout = 'main';
 	}
 	
 	//ユーザー情報（名前、f/f、ツイート数）を算出してsetもする関数
 	//View側ではそれぞれ$username, $following_num, $followers_num, $tweets_num
-	//（memo: setもここでするのは混乱するかも？）
 	public function setUserStatus($user_id) {
 		$this->loadModel('User');
 		$this->loadModel('Follow');

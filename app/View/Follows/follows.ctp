@@ -28,9 +28,9 @@ foreach($follows as $follow):
 		<div class=follow>
 		<?php
 			//フォローボタン
-			if( $user_id == $user["id"]
-			and !empty( $user )
-			and $user["id"] != $current_id ) {
+			if( $user_id == $authUser["id"]
+			and !empty( $authUser )
+			and $authUser["id"] != $current_id ) {
 				//アンフォローボタンを表示する
 				echo $this->Form->postButton("unfollow", "/Users/delete_follow/",
 						array('data'=> array('follow_id'=>$current_id)));

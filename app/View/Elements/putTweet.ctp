@@ -2,7 +2,7 @@
 	<div class=delete_tweet>
 		<?php
 		//ツイート消すボタン
-		if( $tweet["Tweet"]["user_id"] == $user["id"] ) {
+		if( $tweet["Tweet"]["user_id"] == $authUser["id"] ) {
 				echo $this->Form->postLink("消す", 
 				array('action'=>"delete_tweet",$tweet["Tweet"]["id"]),
 				array('class'=>'link-style'),
