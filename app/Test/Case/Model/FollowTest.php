@@ -43,7 +43,7 @@ class FollowTest extends CakeTestCase {
   
   public function testGetFollowingIds() {
   	$ids = $this->Follow->getFollowingIds( 1 );
-  	$this->assertEquals( array(2,3), $ids);
+  	$this->assertEquals( array(3,2), $ids);
   	
   	$ids = $this->Follow->getFollowingIds( 3 );
   	$this->assertEquals( array(), $ids);

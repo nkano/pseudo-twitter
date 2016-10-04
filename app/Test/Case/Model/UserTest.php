@@ -63,8 +63,22 @@ class UserTest extends CakeTestCase {
   public function testUsernameToId() {
   	$this->assertEquals( 1, $this->User->usernameToId( 'aaa' ) );
   }
-  public function testUserIdToName() {
+  
+	public function testUserIdToName() {
   	$this->assertEquals( 'aaa', $this->User->userIdToName( 1 ) );
+  }
+  
+  public function testUsernameLikeToIds() {
+  	$this->assertEquals( array(1), $this->User->usernameLikeToIds( 'aa' ) );
+  	$this->assertEquals( array(1,2,3), $this->User->usernameLikeToIds( '' ) );
+  }
+  
+  public function testPageUsers() {
+  	$this->assertCount( 2, $this->User->pageUsers( array(1,2), 1 ) );
+  	$this->assertCount( 0, $this->User->pageUsers( array(1,2), 2 ) );
+  	
+  	//limit=1
+  	$this->assertCount( 1, $this->User->pageUsers( array(1,2), 1, 1 ) );
   }
 }
 ?>
