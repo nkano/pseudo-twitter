@@ -1,11 +1,6 @@
 ﻿<?php echo $this->Html->script( 'jquery-3.1.0.min.js', array( 'inline' => false)); ?>
 <?php echo $this->Html->script( 'hoverColor.js', array( 'inline' => false)); ?>
-
-
-<?php
-//デバッグ
-//echo "<pre>"; print_r($latest_tweets); echo "</pre>";
-?>
+<?php echo $this->Html->script( 'loadUsersWhenScrolled.js', array( 'inline' => false)); ?>
 
 <?php
 	echo $this->element( 'putUserStatus' );
@@ -20,8 +15,9 @@ echo 'さんのフォロワー';
 
 
 <!- //フォロワー一覧を表示->
+<?php echo '<div id="userlist" data-page_num=1 data-current_location="followers/'. $username. '">' ?>
 <?php 
 foreach($users as $user):
 	echo $this->element('putUserSimple', array('user' => $user));
 endforeach; ?>
-
+</div>

@@ -36,8 +36,10 @@ class Follow extends AppModel {
 	
 	//$user_idがフォローしてる人のidを返す
 	public function getFollowingIds( $user_id, $add_himself = false ) {
-		$conditions = array( 'user_id' => $user_id );
-		$follows = $this->find( 'all', compact( "conditions" ) );
+		$follows = $this->find( 'all', array(
+			'conditions' => array( 'user_id' => $user_id ),
+			'order' => array('follow_id' => 'desc')
+		));
 		$follow_ids = ($add_himself)? array( $user_id ) : array();
 		foreach( $follows as $f ) {
 			$follow_ids[] = $f["Follow"]["follow_id"];	//フォローしてる人のIDを入れる
@@ -47,8 +49,10 @@ class Follow extends AppModel {
 	
 	//$user_idをフォローしてる人のidを返す
 	public function getFollowerIds( $user_id ) {
-		$conditions = array( 'follow_id' => $user_id );
-		$followers = $this->find( 'all', compact( "conditions" ) );
+		$followers = $this->find( 'all', array(
+			'conditions' => array( 'follow_id' => $user_id ),
+			'order' => array('user_id' => 'desc')
+		));
 		$follower_ids = array();
 		foreach( $followers as $f ) {
 			$follower_ids[] = $f["Follow"]["user_id"];	//フォローしてる人のIDを入れる

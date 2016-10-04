@@ -12,7 +12,7 @@
       <div id="header_menu">
         <?php
         	echo $this->Html->link('ユーザー検索', '/users/search' );
-          if(isset($user)):
+          if(isset($authUser)):
             echo $this->Html->link('ログアウト', '/users/logout');
           else:
             echo $this->Html->link('ログイン', '/users/login');

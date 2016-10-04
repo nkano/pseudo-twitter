@@ -3,6 +3,7 @@ App::uses('AppModel', 'Model');
 
 class User extends AppModel {
 	//アソシエーション。重くなったらbindModel()
+	/*
 	public $hasMany = array(
 		'FollowingThem' => array(
 			'className' => 'Follow',
@@ -17,7 +18,7 @@ class User extends AppModel {
 			'foreignKey' => 'user_id'
 		)
 	);
-	
+	*/
 	
   //入力チェック機能
   public $validate = array(
@@ -63,16 +64,31 @@ class User extends AppModel {
   }
   
   public function usernameToId( $username ) {
-  	//select id from users where username = $username
   	return $this->find('first', array("conditions"=>array("username"=>$username)))["User"]["id"];
   }
   
   public function userIdToName( $user_id ) {
-  	
-  	//select id from users where username = $username
   	return $this->find('first', array("conditions"=>array("id"=>$user_id)))["User"]["username"];
-  	
   }
   
-
+  public function usernameLikeToIds( $query ) {
+  	$results = $this->find('all', array(
+			'conditions'=> array('username LIKE' => '%'.$query.'%' )
+		));
+		$ids = array();
+		foreach( $results as $r ) {
+			$ids[] = $r["User"]["id"];
+		}
+  	return $ids;
+  }
+  
+	public function pageUsers( $ids, $page, $limit = 10 ) {
+  	$options = array( "conditions" => array( 'id' => $ids ),
+    	'order' => array('User.id' => 'desc'),
+    	'limit' => $limit,
+    	'page' => $page );
+		return $this->find( 'all', $options);
+  }
+	
+	
 }

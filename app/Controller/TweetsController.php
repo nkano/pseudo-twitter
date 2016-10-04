@@ -4,14 +4,11 @@ App::uses('AppController', 'Controller');
 class TweetsController extends AppController {
 	public $components = array('Session');
 	
-	
   public function beforeFilter() {
     parent::beforeFilter();
 		
 		//ログイン済みでなければアクセスできないアクションを指定
     $this->Auth->deny('index');
-    
-    
   }
 	
 	//ホーム画面
@@ -38,6 +35,10 @@ class TweetsController extends AppController {
 	//ユーザごとのツイート画面
   public function posts($username){
 		$this->loadModel('User');
+		if( empty($this->User->find( 'count', array( 'conditions' => array('username' => $username))))){
+			return $this->redirect('/tweets/index');
+		}
+		
 		$user_id = $this->User->usernameToId( $username );
 		
 		//ツイート
@@ -75,7 +76,6 @@ class TweetsController extends AppController {
 			
 			if ($savedData) {
 				$this->set('tweet', $savedData);
-				
 			} else {
 				//投稿失敗
 				$this->set('tweet', array());
@@ -108,7 +108,7 @@ class TweetsController extends AppController {
 				if( $splitted_location[0] == "posts" ) {
 					//posts画面のユーザのidを取得
 					$this->loadModel('User');
-					$ids = $this->User->usernameToId( $splitted_location );
+					$ids = $this->User->usernameToId( $splitted_location[1] );
 				} else {
 					//不正なGETパラメータ
 					return false;
@@ -139,7 +139,7 @@ class TweetsController extends AppController {
 				if( $splitted_location[0] == "posts" ) {
 					//posts画面のユーザのidを取得
 					$this->loadModel('User');
-					$ids = $this->User->usernameToId( $splitted_location );
+					$ids = $this->User->usernameToId( $splitted_location[1] );
 				} else {
 					//不正なGETパラメータ
 					return false;
@@ -150,10 +150,12 @@ class TweetsController extends AppController {
 			
 			$options = array( 
 				"conditions" => array( 'user_id' => $ids, 'time >' => $t),
-    		'order' => array('Tweet.time' => 'desc') );
+    		'order' => array('Tweet.time' => 'desc')
+    	);
     	
 			$tweets = $this->Tweet->find( 'all', $options);
 			$this->set('tweets', $tweets);
+			
 			
 			//debug($this->request->query);
 		}

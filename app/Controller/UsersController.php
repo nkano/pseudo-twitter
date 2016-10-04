@@ -54,20 +54,20 @@ class UsersController extends AppController {
 			$query = $this->request->query('username');
 	    $this->set('query', $query);
 			
-			$conditions = array('username LIKE' => '%'.$query.'%' );
-			$result = $this->User->find('all', array('conditions'=> $conditions));
-	    $this->set('result', $result);
-	    //debug($this->request->params);
-	    if( count($result) >= 1 ) {
+			$ids = $this->User->usernameLikeToIds($query);
+			$users = $this->User->pageUsers( $ids, 1 );
 			
-				$this->Session->setFlash( h($query).'の検索結果は'.count($result).'件です');
+	    $this->set('users', $users);
+	    if( count($ids) >= 1 ) {
+			
+				$this->Session->setFlash( h($query).'の検索結果は'.count($ids).'件です');
 			
 				//検索に引っかかった人たちの最新のつぶやき
 				$this->loadModel('Tweet');
 				$latest_tweets = array();
-				foreach( $result as $r ) {
-					$tweet = $this->Tweet->getLatest( $r["User"]["id"] );
-					$latest_tweets[$r["User"]["id"]] = $tweet;
+				foreach( $users as $u ) {
+					$tweet = $this->Tweet->getLatest( $u["User"]["id"] );
+					$latest_tweets[$u["User"]["id"]] = $tweet;
 				}
 				$this->set( 'latest_tweets', $latest_tweets );
 			
@@ -106,5 +106,50 @@ class UsersController extends AppController {
 		}
 	}
 	
-
+	
+	//スクロールして次ページのユーザーを表示
+	public function expand_user_list() {
+		if ($this->request->is('get') && $this->request->is('ajax')) {
+			$this->layout = "";
+			$splitted_location = explode( "/", $this->request->query["current_location"] );
+			if( $splitted_location[0] == "search_result" ) {
+				//検索IDを取得
+				$ids = $this->User->usernameLikeToIds( $splitted_location[1] );
+				
+			} else if( $splitted_location[0] == "follows" ) {
+				$this->loadModel( 'Follow' );
+				$user_id = $this->User->usernameToId( $splitted_location[1] );
+				$ids = $this->Follow->getFollowingIds( $user_id );
+			} else if( $splitted_location[0] == "followers" ){
+				$this->loadModel( 'Follow' );
+				$user_id = $this->User->usernameToId( $splitted_location[1] );
+				$ids = $this->Follow->getFollowerIds( $user_id );
+			} else {
+				//不正なGETパラメータ
+				return false;
+			}
+			
+			$page = $this->request->query["page_num"];
+			$users = $this->User->pageUsers( $ids, $page );
+			$this->set('users', $users);
+			
+			$this->loadModel('Tweet');
+			$latest_tweets = array();
+			foreach( $users as $u ) {
+				$tweet = $this->Tweet->getLatest( $u["User"]["id"] );
+				$latest_tweets[$u["User"]["id"]] = $tweet;
+			}
+			$this->set( 'latest_tweets', $latest_tweets );
+			
+			if( !empty($this->Auth->user()) ) {
+				$this->loadModel("Follow");
+				$this->set( 'following_ids', $this->Follow->getFollowingIds( $this->Auth->user()['id'] ) );
+		}
+			
+		}
+		
+	}
+	
+	
+	
 }

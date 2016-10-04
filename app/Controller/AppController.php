@@ -57,4 +57,5 @@ class AppController extends Controller {
 		$this->set('tweets_num', $this->Tweet->countTweetNum( $user_id ) );
 	}
 	
+	
 }
