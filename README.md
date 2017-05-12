@@ -1,4 +1,3 @@
 # pseudo-twitter
 
-こちらは旧バージョン（文字コードUTF-8）です。
-新バージョン（文字コードUTF-8N）はnkano/pseudo-twitter2です。
+Web-engeneering beginner me once upon a time made pseudo-twitter just for the sake of learning
